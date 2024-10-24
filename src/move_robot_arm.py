@@ -15,6 +15,7 @@ display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path
 
 def open_gripper():
     try:
+        # use predefined values from named target 'Open'
         gripper_group.set_named_target('Open')
         
         success = gripper_group.go(wait=True)
@@ -30,6 +31,7 @@ def open_gripper():
 
 def close_gripper():
     try:
+        # use predefined values from named target 'Closed'
         gripper_group.set_named_target('Closed')
         
         success = gripper_group.go(wait=True)
@@ -46,6 +48,7 @@ def close_gripper():
 def lower_gripper():
     current_pose = group.get_current_pose().pose
 
+    # lower the gripper height
     current_pose.position.z -= 0.3
     rospy.loginfo(f"Lowering gripper by {0.3} meters.")
 
@@ -61,21 +64,24 @@ def lower_gripper():
 
 def grasp_object(model):
 
+    # Open the gripper, move arm towards object, close gripper
+    
     open_gripper()
-
-    model.pose.position.z = model.max.z * 0.9
+    model.pose.position.z = model.max.z * 0.9 # update model pose to 90% of object's height
     # model.pose.position.x = model.max.x
     # model.pose.position.y = model.min.y
     rospy.loginfo(f"Grasping object at: {model.pose}")
     group.set_pose_target(model.pose)
     plan = group.plan()
     if group.go(wait=True):
-        close_gripper()
+        close_gripper()     # if it moved to position, grasp object
         rospy.loginfo("OBJECT GRASPED!")
     else:
         rospy.loginfo("GRASPING FAILED")
 
 def move_to_home():
+    # Move arm to predefined 'Home' position
+    
     group.set_named_target('Home')
     success = group.go(wait=True)
     if(success):

@@ -42,14 +42,17 @@ def camera_callback(data):
     for model in data.models:
         rospy.loginfo(f"Model: {model.type}")
 
-        if model.type in ["red_cube"]:
+        # only focused on the red_cube for testing
+        if model.type in ["red_cube"]: 
             rospy.loginfo(f"GRASPABLE OBJECT DETECTED: {model.type}")
             object_detected = True
             grasp_object(model)
-            success = move_to_home()
+            success = move_to_home() # picked up object
+            # move object to target area
             if success:
                 teleop.move_to_left()
                 lower_gripper()
+                # return towards start
                 teleop.move_to_right()
             object_detected = False
             tilt_cmd = 0

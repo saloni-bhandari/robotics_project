@@ -3,6 +3,7 @@ import rospy
 from geometry_msgs.msg import Twist
 import time
 
+# Move the whole robot towards target area
 class LocobotTeleop():
     def __init__(self, topic="/locobot/mobile_base/commands/velocity"):
         self.topic = topic
