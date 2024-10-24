@@ -2,7 +2,7 @@
 import rospy
 from locobot_simulation.msg import LogicalImage  
 from std_msgs.msg import Float64
-from move_robot_arm import grasp_object, shutdown_moveit, move_to_home
+from move_robot_arm import grasp_object, shutdown_moveit, move_to_home, lower_gripper
 import sys
 from locobot_teleop import LocobotTeleop
 
@@ -42,19 +42,16 @@ def camera_callback(data):
     for model in data.models:
         rospy.loginfo(f"Model: {model.type}")
 
-        # if model.type == "blue_target_area":
-        #     rospy.loginfo("BLUE TARGET AREA DETECTED AND STORED.")
-        #     blue_target_area = model
-        #     move_to_target(blue_target_area)
-
         if model.type in ["red_cube"]:
             rospy.loginfo(f"GRASPABLE OBJECT DETECTED: {model.type}")
             object_detected = True
-            #grasp_object(model)
-            #move_to_home()
-            teleop.move_to_right()
-            teleop.move_to_left()
-            rospy.signal_shutdown("moved")
+            grasp_object(model)
+            success = move_to_home()
+            # if success:
+            #     teleop.move_to_left()
+            #     lower_gripper()
+            #     teleop.move_to_right()
+            # rospy.signal_shutdown("moved")
             object_detected = False
             tilt_cmd = 0
             break

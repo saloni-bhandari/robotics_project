@@ -14,7 +14,7 @@ class LocobotTeleop():
         twist = Twist()
         twist.angular.z = -0.8
 
-        turn_duration = 12
+        turn_duration = 11
 
         rospy.loginfo("Turning right 90 degrees")
         start_time = time.time()
@@ -40,7 +40,7 @@ class LocobotTeleop():
         twist = Twist()
         twist.angular.z = 0.8
 
-        turn_duration = 12
+        turn_duration = 11
 
         rospy.loginfo("Turning left 90 degrees")
         start_time = time.time()
@@ -69,6 +69,5 @@ class LocobotTeleop():
 if __name__ == '__main__':
     try:
         teleop = LocobotTeleop()
-        #teleop.move_to_right()
     except rospy.ROSInterruptException:
         pass
