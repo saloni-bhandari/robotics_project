@@ -47,11 +47,10 @@ def camera_callback(data):
             object_detected = True
             grasp_object(model)
             success = move_to_home()
-            # if success:
-            #     teleop.move_to_left()
-            #     lower_gripper()
-            #     teleop.move_to_right()
-            # rospy.signal_shutdown("moved")
+            if success:
+                teleop.move_to_left()
+                lower_gripper()
+                teleop.move_to_right()
             object_detected = False
             tilt_cmd = 0
             break
